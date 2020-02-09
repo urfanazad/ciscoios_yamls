@@ -1,0 +1,20 @@
+---
+- name: configuring ospf on IOS devices cisco  # name of the task
+  hosts: csr   # name of the host
+  gather_facts: false # no need to gather information about what 
+  connection: local  # run from this machine
+  vars: # variable for name (just in case you want to change)
+    cli:
+      username: ansible
+      password: ansible
+  tasks:
+    - name: Enable ospf  # task you want to do 
+      ios_config:  # module your using  from ansible (check it for more shit)
+        provider: "{{ cli }}"   # cli cisco device is being configured
+        authorized: yes  # to enter privileged mode
+        parents: router ospf 100   # parent command define value which you want configured 
+        lines:   # enter lines of command if you want here (moses we are just using one for test)
+          - network 0.0.0.0 255.255.255.255 area 0
+      register: print_output
+    - debug: var=print_output 
+  
